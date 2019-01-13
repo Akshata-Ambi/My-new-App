@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button>click to change background colour</button>
+</body>
+<script>
+     var btn = document.querySelector('button');
+    function generator(){
+      return (Math.floor(Math.random()*255));
+    }
+      
+    btn.addEventListener('click', function()
+    {
+        var bgcolor = "rgb("+generator()+","+generator()+","+generator()+")";
+       document.body.style.backgroundColor=bgcolor;
+    });
+</script>
+</html>
+ 
