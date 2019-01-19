@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Image Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        .main {
+            width: 650px;
+            margin: 0 auto;
+        }
+
+        .thumbnails {
+            margin-top: 20px;
+        }
+
+        .pics {
+            height: 96px;
+            width: 124px;
+        }
+
+        .heading {
+            margin-top: -6px;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <h1 class="heading">Image Gallery Example</h1>
+        <img src="./Image gallery/pic1.jpg" class="big">
+        <div class="thumbnails">
+            <img src="./Image gallery/pic1.jpg" class="pics">
+            <img src="./Image gallery/pic2.jpg" class="pics">
+            <img src="./Image gallery/pic3.jpg" class="pics">
+            <img src="./Image gallery/pic4.jpg" class="pics">
+            <img src="./Image gallery/pic5.jpg" class="pics">
+        </div>
+    </div>
+
+    <script>
+        var mainImage = document.querySelectorAll(".big");
+        console.log(mainImage);
+        var images = document.querySelectorAll(".pics");
+
+        for (i = 0; i < images.length; i++) {
+            images[i].addEventListener('click', function (e) {
+                mainImage[0].setAttribute("src", e.target.src);
+            });
+        }
+    </script>
+</body>
+
+</html>

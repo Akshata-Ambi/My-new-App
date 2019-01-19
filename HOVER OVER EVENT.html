@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+  background-color: red;
+  width: 30px;
+  height:40px;
+  margin:10px;
+  padding: 25px;
+  display:inline-block;
+}
+    </style>
+</head>
+<body>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+
+<script>
+    var divs = document.querySelectorAll("div");
+
+    // Generates random number
+    function generator(){
+      return (Math.floor(Math.random()*255));
+    }
+    
+    // Gives random colour 
+   function randomcolor(){
+        return "rgb("+generator()+","+generator()+","+generator()+")";
+   }
+        
+   // looping on DIVS as queryselectorAll returns a list 
+     for ( i=0;i<divs.length;i++)
+        {
+         var originColour = divs[i].style.backgroundColor; // save initial colour in a variable
+         // On mouseover assign randomclor to particular div
+         divs[i].addEventListener("mouseover",function (event){
+           event.target.style.backgroundColor = randomcolor();
+         });
+         // On mouseout return original colour
+        divs[i].addEventListener("mouseout",function (event){
+           event.target.style.backgroundColor = originColour;
+        });
+    };
+
+</script>
+</body>
+</html>
+ 
