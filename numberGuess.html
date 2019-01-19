@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
 
 <head>
   <meta charset="utf-8">
@@ -17,7 +16,7 @@
     }
 
     .lastResult {
-      color: white;
+      color: black;
       padding: 3px;
     }
   </style>
@@ -31,7 +30,7 @@
 
   <div class="form">
     <label for="guessField">Enter a guess: </label>
-    <input type="text" id="guessField" class="guessField">
+    <input type="number" id="guessField" class="guessField" autocomplete="off">
     <input type="submit" value="Submit guess" class="guessSubmit">
   </div>
 
@@ -39,51 +38,143 @@
     <p class="guesses"></p>
     <p class="lastResult"></p>
     <p class="lowOrHi"></p>
+    <p class="try"></p>
   </div>
 
   <script>
-    // Your JavaScript goes here
+    // Initialization
     var guessfield = document.getElementById("guessField");
     var btn = document.getElementsByClassName("guessSubmit");
     var previousGuesses = document.getElementsByClassName("guesses");
+    var prevResult = document.getElementsByClassName("lastResult");
+    var highLow = document.getElementsByClassName("lowOrHi");
+    var triesLeft = document.getElementsByClassName("try");
     var enteredValue;
+    var num;
+    var count = 1;
 
+    // Initially previous guesses should not be displayed
     previousGuesses[0].innerText = "Previous Guesses:";
     previousGuesses[0].setAttribute("style", "display:none");
 
+    // Random Number Generator
     function randomnumber() {
-      return Math.floor((Math.random * 100) + 1);
-    }
-
-    function highlow(input) {
-      console.log(input);
-    }
-
-    function showPreviousGuesses() {
-      previousGuesses[0].setAttribute("style", "display:block");
-      enteredValue = guessfield.value;
-      previousGuesses[0].innerHTML = previousGuesses[0].innerHTML + ' ' + enteredValue;
-    }
-    btn[0].addEventListener('click', function () {
-      if (typeof guessfield.value !== "number") {
-        alert('Please enter only digits');
-      } else {
-        showPreviousGuesses();
-        highlow(enteredValue);
-      }
-    })
-    guessfield.addEventListener('keydown', function (e) {
-      if (e.key === "Enter") {
-        if (typeof guessfield.value !== "number") {
-          alert('Please enter only digits');
-        } else {
-          showPreviousGuesses();
-          highlow(enteredValue);
-        }
-      }
+      return Math.floor((Math.random() * 100) + 1);
+    };
+    
+    // On load of page Random number should be generated
+    window.addEventListener('load', function () {
+      num = randomnumber();
+      console.log(num);
     });
 
+    // Function to determine the guess is high or low 
+    function highlow(input) {
+      highLow[0].setAttribute("style", "display:block");
+      if (enteredValue < num) {
+        prevResult[0].innerHTML = "Wrong";
+        prevResult[0].setAttribute("style", "background-color:red");
+        highLow[0].innerHTML = "Last guess was too low!";
+      }
+      else if (enteredValue > num) {
+        prevResult[0].innerHTML = "Wrong";
+        prevResult[0].setAttribute("style", "background-color:red");
+        highLow[0].innerHTML = "Last guess was too High!";
+      }
+      else if (enteredValue == num) {
+        prevResult[0].innerHTML = "Congratulations!! your guess is Right";
+        prevResult[0].setAttribute("style", "background-color:green");
+        triesLeft[0].setAttribute("style", "display:none");
+        highLow[0] = resetGame();
+      }
+
+    }
+
+   //Function to show Previous guesses
+    function showPreviousGuesses() {
+      if (guessfield.value == '') {
+        enteredValue = 0;
+      }
+      else {
+        enteredValue = guessfield.value;
+        guessfield.value = "";
+      }
+      previousGuesses[0].setAttribute("style", "display:block");
+      previousGuesses[0].innerHTML = previousGuesses[0].innerHTML + ' ' + enteredValue;
+    }
+
+    //Function to reset game
+    function resetGame() {
+      highLow[0].innerHTML = "<button>Start new game</button>";
+      guessfield.disabled = true;
+      btn[0].disabled = true;
+      highLow[0].addEventListener('click', function () {
+        count = 1;
+        num = randomnumber();
+        console.log(num);
+        previousGuesses[0].setAttribute("style", "display:none");
+        prevResult[0].setAttribute("style", "display:none");
+        guessfield.disabled = false;
+        btn[0].disabled = false;
+        guessfield.value = '';
+        previousGuesses[0].innerHTML = "Previous Guesses:";
+        highLow[0].setAttribute("style", "display:none");
+      });
+    };
+     
+    // If submit button is clicked 
+    btn[0].addEventListener('click', function () {
+     
+      if (count<10 && guessfield.value !== num)
+      {
+      showPreviousGuesses();
+      highlow(enteredValue);
+      triesLeft[0].innerHTML = "Tries left:" +  (10-count);
+      }
+
+      else if (count === 10 && guessfield.value == num ){
+       showPreviousGuesses();
+       highlow(enteredValue);
+       resetGame();
+  
+      }
+      else if (count ===10 && guessfield.value !== num ){
+      prevResult[0].innerHTML = "!! GAME OVER!!";
+      prevResult[0].setAttribute("style", "background-color:red");
+      showPreviousGuesses();
+      triesLeft[0].setAttribute("style", "display:none");
+      resetGame();
+      }  
+      count++;
+    });
+
+    // If Eneter Key is pressed 
+    guessfield.addEventListener('keydown', function (e) {
+      if(e.key=="Enter")
+      {
+      if (count<10 && guessfield.value !== num)
+      {
+      showPreviousGuesses();
+      highlow(enteredValue);
+      triesLeft[0].innerHTML = "Tries left:" +  (10-count);
+      }
+
+      else if (count === 10 && guessfield.value == num ){
+       showPreviousGuesses();
+       highlow(enteredValue);
+       resetGame();
+  
+      }
+      else if (count ===10 && guessfield.value !== num ){
+      prevResult[0].innerHTML = "!! GAME OVER!!";
+      prevResult[0].setAttribute("style", "background-color:red");
+      showPreviousGuesses();
+      triesLeft[0].setAttribute("style", "display:none");
+      resetGame();
+      }  
+      count++;
+    }
+    });
   </script>
 </body>
-
 </html>

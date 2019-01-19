@@ -1,0 +1,153 @@
+<!doctype html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Number guessing game</title>
+    <style>
+        html {
+            font-family: sans-serif;
+        }
+
+        body {
+            width: 50%;
+            max-width: 800px;
+            min-width: 480px;
+            margin: 0 auto;
+        }
+
+        .lastResult {
+            color: black;
+            padding: 3px;
+        }
+
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Number guessing game</h1>
+
+    <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your
+        guess was too high or too low.</p>
+
+    <div class="form">
+        <label for="guessField">Enter a guess: </label>
+        <input type="number" id="guessField" class="guessField">
+        <input type="submit" value="Submit Guess" class="guessSubmit">
+    </div>
+
+    <div class="resultParas">
+        <p class="guesses"></p>
+        <p class="triesLeft"></p>
+        <p class="lastResult"></p>
+        <p class="lowOrHi"></p>
+    </div>
+
+    <script>
+        // Your JavaScript goes here
+        var guessfield = document.getElementById("guessField");
+        var btn = document.getElementsByClassName("guessSubmit");
+        var previousGuesses = document.getElementsByClassName("guesses");
+        var prevResult = document.getElementsByClassName("lastResult");
+        var highLow = document.getElementsByClassName("lowOrHi");
+        var triesLeft = document.getElementsByClassName("triesLeft");
+        var enteredValue;
+        var generatedNumber;
+        var isCorrectAnswer = false;
+        var count;
+
+        window.addEventListener('load', function () {
+            setPage();
+        });
+
+        btn[0].addEventListener('click', function () {
+            checkNumber();
+        });
+
+        guessfield.addEventListener('keydown', function (e) {
+            if (e.key === "Enter") {
+                checkNumber();
+            }
+        });
+
+        function setPage() {
+            generatedNumber = generateRandomNumber();
+            count = 1;
+            previousGuesses[0].innerText = "Previous Guesses:";
+            previousGuesses[0].setAttribute("style", "display:none");
+            triesLeft[0].setAttribute("style", "display:none");
+            prevResult[0].setAttribute("style", "display:none");
+            guessfield.disabled = false;
+            guessfield.value = '';
+            btn[0].disabled = false;
+            highLow[0].setAttribute("style", "display:None");
+        }
+
+        function generateRandomNumber() {
+            return Math.floor((Math.random() * 100) + 1);
+        };
+
+        function showPreviousGuesses(value) {
+            previousGuesses[0].setAttribute("style", "display:block");
+            previousGuesses[0].innerHTML = previousGuesses[0].innerHTML + ' ' + value;
+        }
+
+        function showTriesLeft(count) {
+            triesLeft[0].setAttribute("style", "display:block");
+            triesLeft[0].innerText = "You have " + (10 - count) + " tries left";
+        }
+
+        function calculateHighOrLow(input) {
+            highLow[0].setAttribute("style", "display:block");
+            if (input === generatedNumber) {
+                prevResult[0].innerHTML = "Congratulations!! your guess is Right";
+                prevResult[0].setAttribute("style", "background-color:green");
+                triesLeft[0].setAttribute("style", "display:none");       // Need to hide number of tries left as the value entered is correct
+                isCorrectAnswer = true;
+            } else if (input > generatedNumber) {
+                prevResult[0].innerHTML = "Wrong";
+                prevResult[0].setAttribute("style", "background-color:red");
+                highLow[0].innerHTML = "Last guess was too High!";
+                isCorrectAnswer = false;
+            } else {
+                prevResult[0].innerHTML = "Wrong";
+                prevResult[0].setAttribute("style", "background-color:red");
+                highLow[0].innerHTML = "Last guess was too low!";
+                isCorrectAnswer = false;
+            }
+        }
+
+        function endGame(isCorrectAnswer) {
+            if (!isCorrectAnswer) {
+                prevResult[0].innerText = "!! GAME OVER!!";
+            }
+            highLow[0].innerHTML = "<button>Start new game</button>";
+            guessfield.disabled = true;
+            btn[0].disabled = true;
+            highLow[0].addEventListener('click', function () {
+                setPage();
+            });
+        };
+
+        function checkNumber() {
+            guessfield.value = guessfield.value === '' ? 0 : guessfield.value;
+            enteredValue = parseInt(guessfield.value);
+            showPreviousGuesses(enteredValue);
+            showTriesLeft(count);
+            calculateHighOrLow(enteredValue);
+            if (count === 10 || isCorrectAnswer) {          // As count is starting from 1
+                endGame(isCorrectAnswer);
+            }
+            guessfield.value = '';
+            count++;
+        }
+
+    </script>
+</body>
+
+</html>
